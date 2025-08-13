@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Heart-Themed Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: #ffeef8;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      position: relative;
+    }
+
+    .calculator {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.3);
+      z-index: 2;
+    }
+
+    .display {
+      width: 100%;
+      height: 50px;
+      margin-bottom: 15px;
+      text-align: right;
+      padding: 10px;
+      font-size: 1.8em;
+      border: 2px solid #f8bbd0;
+      border-radius: 10px;
+      background: #fff0f5;
+      color: #c2185b;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 70px);
+      gap: 12px;
+    }
+
+    button {
+      height: 60px;
+      font-size: 1.4em;
+      border: none;
+      background: #f8bbd0;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: white;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #f48fb1;
+    }
+
+    #clear {
+      background: #ffccd5;
+      color: #d6001c;
+    }
+
+    /* Floating heart background */
+    .heart {
+      position: absolute;
+      color: #ff69b4;
+      font-size: 20px;
+      animation: float 6s linear infinite;
+      opacity: 0.7;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <input type="text" class="display" id="display" disabled>
+    <div class="buttons">
+      <button>7</button>
+      <button>8</button>
+      <button>9</button>
+      <button>+</button>
+
+      <button>4</button>
+      <button>5</button>
+      <button>6</button>
+      <button>-</button>
+
+      <button>1</button>
+      <button>2</button>
+      <button>3</button>
+      <button>*</button>
+
+      <button>0</button>
+      <button id="clear">C</button>
+      <button>=</button>
+      <button>/</button>
+    </div>
+  </div>
+
+  <!-- Sound: Make sure this is a valid MP3 -->
+  <audio id="clickSound" src="whoosh-rheostatic-387741.mp3" preload="auto"></audio>
+
+  <script>
+    const display = document.getElementById('display');
+    const buttons = document.querySelectorAll('.buttons button');
+    const clickSound = document.getElementById('clickSound');
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const value = button.textContent;
+
+        // Play sound only if sound is loaded
+        if (!clickSound.paused) {
+          clickSound.pause();
+        }
+        clickSound.currentTime = 0;
+        clickSound.play();
+
+        if (value === '=') {
+          try {
+            display.value = eval(display.value);
+          } catch {
+            display.value = 'Error';
+          }
+        } else if (value === 'C') {
+          display.value = '';
+        } else {
+          display.value += value;
+        }
+      });
+    });
+
+    // Floating heart animation
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerHTML = '❤';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+      heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 6000);
+    }
+
+    setInterval(createHeart, 400);
+  </script>
+
+</body>
+</html>
